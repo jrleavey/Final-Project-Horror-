@@ -23,6 +23,13 @@ public class PlayerController : MonoBehaviour
     float turnSmoothVelocity;
     public float turnSmoothTime = 0.1f;
 
+    private AudioSource AudioSource;
+    public AudioClip winSound;
+    public GameObject winScreen;
+    public GameObject loseScreen;
+    public GameObject pCamera;
+    public bool isLightOn = true;
+
     void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
@@ -58,6 +65,27 @@ public class PlayerController : MonoBehaviour
 
             Vector3 moveDir = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
             controller.Move(moveDir.normalized * speed * Time.deltaTime);
+        }
+    }
+    public void CaughtByMonster()
+    {
+        loseScreen.SetActive(true);
+        Time.timeScale = 0;
+        pCamera.GetComponent<MouseLook>().enabled = false;
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+    }
+    public void OnTriggerEnter(Collider other)
+    {
+
+        if (other.tag == "Win")
+        {
+            pCamera.GetComponent<MouseLook>().enabled = false;
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+            winScreen.SetActive(true);
+            AudioSource.PlayClipAtPoint(winSound, transform.position);
+            Time.timeScale = 0;
         }
     }
 }

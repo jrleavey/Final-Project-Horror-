@@ -30,13 +30,21 @@ public class PlayerController : MonoBehaviour
     public GameObject pCamera;
     public bool isLightOn = true;
 
+    public GameObject playerCamera;
+    public GameObject monsterCamera;
+    public bool playerCamOn = true;
+
     void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
+        playerCamera.SetActive(true);
+        monsterCamera.SetActive(false);
     }
     void Update()
     {
         Movement();
+        CameraSwap();
+
     }
     private void Movement()
     {
@@ -86,6 +94,21 @@ public class PlayerController : MonoBehaviour
             winScreen.SetActive(true);
             AudioSource.PlayClipAtPoint(winSound, transform.position);
             Time.timeScale = 0;
+        }
+    }
+    public void CameraSwap()
+    {
+        if (Input.GetKeyDown(KeyCode.G) && playerCamOn == true)
+        {
+            playerCamera.SetActive(false);
+            monsterCamera.SetActive(true);
+            playerCamOn = false;
+        }
+        else if (Input.GetKeyDown(KeyCode.G) && playerCamOn == false)
+        {
+            monsterCamera.SetActive(false);
+            playerCamera.SetActive(true);
+            playerCamOn = true;
         }
     }
 }
